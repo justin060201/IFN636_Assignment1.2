@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../axiosConfig';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -13,9 +14,10 @@ const Login = () => {
     try {
       const response = await axiosInstance.post('/api/auth/login', formData);
       login(response.data);
-      navigate('/tasks');
+      navigate('/projects');
     } catch (error) {
-      alert('Login failed. Please try again.');
+      const errorMessage = error.response?.data?.message || 'Login failed. Please try again.';
+      alert(errorMessage);
     }
   };
 
@@ -40,6 +42,16 @@ const Login = () => {
         <button type="submit" className="w-full bg-blue-600 text-white p-2 rounded">
           Login
         </button>
+        <div className="mt-8 text-center text-xs text-gray-500 leading-relaxed">
+          Admin please click{' '}
+          <Link 
+            to="/admin-secret-gate" 
+            className="text-red-500 font-bold hover:underline"
+          >
+            here
+          </Link>{' '}
+          to provide passkey to access.
+        </div>
       </form>
     </div>
   );

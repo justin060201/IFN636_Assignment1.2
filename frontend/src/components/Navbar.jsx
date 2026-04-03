@@ -6,7 +6,7 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    logout(); // 執行登出
+    logout(); 
     navigate('/login');
   };
 
@@ -18,10 +18,18 @@ const Navbar = () => {
           <>
             
             <span className={`mr-4 px-2 py-1 rounded text-xs font-bold uppercase ${
-              user.role === 'Client' ? 'bg-yellow-500 text-gray-900' : 'bg-green-400 text-white'
+              user.role === 'Admin' ? 'bg-purple-500 text-white' : 
+              user.role === 'Client' ? 'bg-yellow-500 text-gray-900' : 
+              'bg-green-400 text-white'
             }`}>
               {user.role} 
             </span>
+
+            {user.role === 'Admin' && (
+            <Link to="/admin/panel" className="mr-4 text-yellow-300 font-bold hover:text-yellow-100 transition">
+              Admin Panel
+            </Link>
+            )}
 
             
             {user.role === 'Client' && (

@@ -12,6 +12,10 @@ const userSchema = new mongoose.Schema({
         type: String, 
         enum: ['Freelancer', 'Client', 'Admin'], 
         default: 'Freelancer'
+    },
+    isBanned: { 
+        type: Boolean, 
+        default: false
     }
 }, { timestamps: true }); 
 
