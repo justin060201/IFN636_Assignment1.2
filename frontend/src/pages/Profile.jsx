@@ -23,7 +23,7 @@ const Profile = () => {
         setFormData({
           name: response.data.name,
           email: response.data.email,
-          university: response.data.university || '',
+          phone: response.data.phone || '',
           address: response.data.address || '',
         });
       } catch (error) {
@@ -75,8 +75,8 @@ const Profile = () => {
         />
         <input
           type="text"
-          placeholder="University"
-          value={formData.university}
+          placeholder="phone"
+          value={formData.phone}
           onChange={(e) => setFormData({ ...formData, university: e.target.value })}
           className="w-full mb-4 p-2 border rounded"
         />
