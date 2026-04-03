@@ -29,6 +29,12 @@ const loginUser = async (req, res) => {
         const user = await User.findOne({ email });
         if (user && (await bcrypt.compare(password, user.password))) {
 
+            if (user.isBanned) {
+                return res.status(403).json({ 
+                    message: 'You are banned, please contact administrator.。' 
+                });
+            }
+
             res.json({ id: user.id, name: user.name, email: user.email, role: user.role, token: generateToken(user.id) });
         } else {
             res.status(401).json({ message: 'Invalid email or password' });

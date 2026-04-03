@@ -8,6 +8,8 @@ import CreateProject from './pages/CreateProject';
 import ProjectDetails from './pages/ProjectDetails';
 import EditProject from './pages/EditProject';
 import ProjectList from './pages/ProjectList';
+import AdminEntry from './pages/AdminEntry';
+import AdminPanel from './pages/AdminPanel';
 function App() {
   return (
     <Router>
@@ -21,6 +23,8 @@ function App() {
         <Route path="/project/:projectId" element={<ProjectDetails />} />
         <Route path="/edit-project/:projectId" element={<EditProject />} />
         <Route path="/projects" element={<ProjectList />} />
+        <Route path="/admin-secret-gate" element={<AdminEntry />} />
+        <Route path="/admin/panel" element={<AdminPanel />} />
       </Routes>
     </Router>
   );
