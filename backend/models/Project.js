@@ -5,6 +5,7 @@ const projectSchema = new mongoose.Schema({
   description: { type: String, required: true },
   budget: { type: Number, required: true },
   deadline: { type: Date, required: true },
+  filePath: { type: String },
   client: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',

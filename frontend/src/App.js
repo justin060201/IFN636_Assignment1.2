@@ -4,7 +4,10 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Profile from './pages/Profile';
 import Tasks from './pages/Tasks';
-
+import CreateProject from './pages/CreateProject';
+import ProjectDetails from './pages/ProjectDetails';
+import EditProject from './pages/EditProject';
+import ProjectList from './pages/ProjectList';
 function App() {
   return (
     <Router>
@@ -14,6 +17,10 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/tasks" element={<Tasks />} />
+        <Route path="/create-project" element={<CreateProject />} />
+        <Route path="/project/:projectId" element={<ProjectDetails />} />
+        <Route path="/edit-project/:projectId" element={<EditProject />} />
+        <Route path="/projects" element={<ProjectList />} />
       </Routes>
     </Router>
   );

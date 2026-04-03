@@ -6,4 +6,13 @@ const axiosInstance = axios.create({
   headers: { 'Content-Type': 'application/json' },
 });
 
+axiosInstance.interceptors.request.use((req) => {
+  const profile = localStorage.getItem('profile'); 
+  if (profile) {
+
+    req.headers.Authorization = `Bearer ${JSON.parse(profile).token}`;
+  }
+  return req;
+});
+
 export default axiosInstance;

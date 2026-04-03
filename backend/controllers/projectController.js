@@ -1,14 +1,25 @@
+
+
 const Project = require('../models/Project')
 
 const createProject = async (req, res) => {
     try {
+        
         const {title , description, budget, deadline} = req.body;
+
+        
+        let filePath = '';
+        if (req.file) {
+            
+            filePath = `/uploads/${req.file.filename}`; 
+        }
 
         const project = await Project.create({
             title,
             description,
-            budget,
+            budget: Number(budget), 
             deadline,
+            filePath, 
             client: req.user.id
         });
 
@@ -18,7 +29,9 @@ const createProject = async (req, res) => {
     }
 };
 
-//TO DO: read, update delete project
+
+
+
 const getProjects = async (req, res) => {
     try {
         const projects = await Project.find().populate('client', 'name email');
@@ -29,10 +42,29 @@ const getProjects = async (req, res) => {
     }
 };
 
+const getProjectById = async (req, res) => {
+    try {
+        const project = await Project.findById(req.params.id);
+
+        if (!project) {
+            return res.status(404).json({ message: 'Project not found' });
+        }
+
+        
+        if (project.client.toString() !== req.user.id) {
+            return res.status(401).json({ message: 'User not authorized' });
+        }
+
+        res.status(200).json(project);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 
 const updateProject = async (req, res) => {
-    try{
-        const project = await Project.findById(req.params.id);
+    try {
+        let project = await Project.findById(req.params.id);
 
         if (!project) {
             return res.status(404).json({ message: 'Project not found' });
@@ -40,20 +72,32 @@ const updateProject = async (req, res) => {
 
         if (project.client.toString() !== req.user.id) {
             return res.status(401).json({ message: 'User not authorized to update this project' });
-    }
+        }
 
-    const updatedProject = await Project.findByIdAndUpdate(
+        // 1. 整理更新的文字資料
+        const updateData = { ...req.body };
+        
+        // 2. 如果編輯時有上傳新檔案，更新檔案路徑
+        if (req.file) {
+            updateData.filePath = `/uploads/${req.file.filename}`;
+        }
+
+        // 3. 執行更新
+        const updatedProject = await Project.findByIdAndUpdate(
             req.params.id,
-            req.body,
+            updateData, // 使用整理過的資料（包含潛在的新檔案路徑）
             { new: true }
-    );
+        );
 
-    res.status(200).json(updatedProject);
+        res.status(200).json(updatedProject);
     } 
     catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
+
+
+
 
 const deleteProject = async (req, res) => {
     try {
@@ -80,5 +124,6 @@ module.exports = {
     createProject,
     getProjects,
     updateProject,
-    deleteProject
+    deleteProject,
+    getProjectById
 };
