@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import axiosInstance from '../axiosConfig';
 import { useAuth } from '../context/AuthContext';
 
 const AdminPanel = () => {
   const [users, setUsers] = useState([]);
-  const { user: currentUser } = useAuth(); //
+  const { user: currentUser } = useAuth();
 
-
-  const fetchUsers = async () => {
+  
+  const fetchUsers = useCallback(async () => {
+    if (!currentUser) return;
     try {
       const res = await axiosInstance.get('/api/admin/users', {
         headers: { Authorization: `Bearer ${currentUser.token}` }
@@ -16,8 +17,7 @@ const AdminPanel = () => {
     } catch (error) {
       console.error('Cannot get User List', error);
     }
-  };
-
+  }, [currentUser]); 
 
   const handleToggleBan = async (userId) => {
     try {
@@ -32,8 +32,8 @@ const AdminPanel = () => {
   };
 
   useEffect(() => {
-    if (currentUser) fetchUsers();
-  }, [currentUser]);
+    fetchUsers();
+  }, [fetchUsers]); // 這裡只需放 fetchUsers，因為它已經由 useCallback 保護了
 
   return (
     <div className="max-w-6xl mx-auto p-6 mt-10">
