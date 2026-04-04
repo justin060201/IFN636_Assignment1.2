@@ -34,7 +34,12 @@ const createProject = async (req, res) => {
 
 const getProjects = async (req, res) => {
     try {
-        const projects = await Project.find().populate('client', 'name email');
+        const projects = await Project.find({
+            $or: [
+                { client: req.user.id },
+                { freelancer: req.user.id }
+            ]
+        }).populate('client', 'name email');
         res.status(200).json(projects);
     } 
     catch (error) {
@@ -49,9 +54,11 @@ const getProjectById = async (req, res) => {
         if (!project) {
             return res.status(404).json({ message: 'Project not found' });
         }
-
         
-        if (project.client.toString() !== req.user.id) {
+        const isClient = project.client.toString() === req.user.id;
+        const isFreelancer = project.freelancer && project.freelancer.toString() === req.user.id;
+        
+        if (!isClient && !isFreelancer) {
             return res.status(401).json({ message: 'User not authorized' });
         }
 
