@@ -16,7 +16,7 @@ const TaskForm = ({ tasks, setTasks, editingTask, setEditingTask }) => {
         title: editingTask.title,
         description: editingTask.description,
         deadline: editingTask.deadline ? editingTask.deadline.split('T')[0] : '',
-        budget: editingTask.budget || '',
+        budget: editingTask.budget ? editingTask.budget.toString() : '',
       });
       setFile(null); 
     } else {
@@ -39,11 +39,10 @@ const TaskForm = ({ tasks, setTasks, editingTask, setEditingTask }) => {
       dataToSubmit.append('file', file);
     }
 
-    // 4. 設定 headers，必須包含 token 以及 multipart/form-data
+
     const config = {
       headers: { 
-        Authorization: `Bearer ${user.token}`,
-        'Content-Type': 'multipart/form-data' 
+        Authorization: `Bearer ${user.token}`,        
       },
     };
 
@@ -68,8 +67,9 @@ const TaskForm = ({ tasks, setTasks, editingTask, setEditingTask }) => {
       
 
       setEditingTask(null);
-      setFormData({ title: '', description: '', deadline: '' });
+      setFormData({ title: '', description: '', deadline: '', budget: '' });
       setFile(null); 
+      alert(editingTask ? 'Project updated!' : 'Project created!');
       
     } catch (error) {
       console.error(error);

@@ -11,6 +11,13 @@ const projectSchema = new mongoose.Schema({
     ref: 'User',
     required: true
   },
+
+  freelancer: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  },
+
+  
   status: {
     type: String,
     enum: ['Open', 'In Progress', 'Completed', 'Cancelled'],
